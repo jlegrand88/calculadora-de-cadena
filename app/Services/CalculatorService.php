@@ -13,7 +13,7 @@ class CalculatorService implements ICalculatorService
 {
     public function sumar(string $summationString) : int {
         $numbers = explode(',', $summationString);
-        $result = array_sum(array_slice($numbers, 0, 2));
+        $result = array_sum($numbers);
         $this->writeJson($summationString, $result);
         return $result;
     }
