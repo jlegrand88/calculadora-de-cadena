@@ -45,10 +45,7 @@ export default {
             var e = error;
         })
         .then((response) => {
-            console.log('calculator logs');
-            console.log(response.data);
             this.tableRows = response.data;
-            axios.defaults.headers.common["Authorization"] = 'Bearer '+this.token;
         });
     }
 }

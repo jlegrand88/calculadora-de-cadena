@@ -20162,10 +20162,7 @@ __webpack_require__.r(__webpack_exports__);
       // eslint-disable-next-line
       var e = error;
     }).then(function (response) {
-      console.log('calculator logs');
-      console.log(response.data);
       _this.tableRows = response.data;
-      axios.defaults.headers.common["Authorization"] = 'Bearer ' + _this.token;
     });
   }
 });

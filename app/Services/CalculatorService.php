@@ -12,7 +12,18 @@ use Carbon\Carbon;
 class CalculatorService implements ICalculatorService
 {
     public function sumar(string $summationString) : int {
-        $numbers = preg_split('/[\s,]+/', $summationString);
+        if (Str::startsWith($summationString, '//')) {
+            $data = preg_split('/[\s]+/', $summationString);
+            $separators = str_replace('//', '', $data[0]);
+            // dd($separators);
+            // $numbers = preg_split('/['.$separators.']+/', $data[1]);
+            $rawData = $data[1];
+        }else {
+            // $numbers = preg_split('/[\s,]+/', $summationString);
+            $separators = ';';
+            $rawData = $summationString;
+        }
+        $numbers = preg_split('/['.$separators.']+/', $rawData);
         $result = array_sum($numbers);
         $this->writeJson($summationString, $result);
         return $result;
