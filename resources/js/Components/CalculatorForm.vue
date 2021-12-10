@@ -52,8 +52,9 @@
         <!-- RESULTADOS -->
         <div id="calculator-response-container" class="animated fadeInDown col-span-12 lg:col-span-6">
             <transition enter-to-class="animated fadeInDown" leave-to-class="animated fadeOutUp">
-                <div id="helpOnFail" v-if="showHelpOnFail == true">
+                <div id="helpOnFail" v-if="showHelpOnFail == true" class="bg-red-200 rounded-lg p-2">
                     <div id="helpOnFailText">¡Ha ocurrido un error!</div>
+                    <div id="helpOnFailText">negativos no permitidos {{ negatives }}</div>
                 </div>
             </transition>
 
@@ -89,7 +90,8 @@
                 summationString: '',
                 // response
                 calculatedHistoryGridItems: [],
-                result: 0
+                result: 0,
+                negatives: '',
             };
         },
         methods: {
@@ -121,10 +123,16 @@
                     var e = error;
                 })
                 .then((response) => {
-                    this.result = response.data;
-                    this.showLoading=false;
-                    this.showLogResults=true;
-                    scrollTo('#calculator-response-container');
+                    if(response.data.success) {
+                        this.result = response.data.result;
+                        this.showLoading=false;
+                        this.showLogResults=true;
+                        scrollTo('#calculator-response-container');
+                    } else {
+                        this.showHelpOnFail = true;
+                        this.showLoading=false;
+                        this.negatives = response.data.result;
+                    }
                 });
             }
         },

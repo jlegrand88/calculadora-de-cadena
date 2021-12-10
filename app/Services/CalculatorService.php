@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\ICalculatorService;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
 use Carbon\Carbon;
@@ -12,18 +13,7 @@ use Carbon\Carbon;
 class CalculatorService implements ICalculatorService
 {
     public function sumar(string $summationString) : int {
-        if (Str::startsWith($summationString, '//')) {
-            $data = preg_split('/[\s]+/', $summationString);
-            $separators = str_replace('//', '', $data[0]);
-            // dd($separators);
-            // $numbers = preg_split('/['.$separators.']+/', $data[1]);
-            $rawData = $data[1];
-        }else {
-            // $numbers = preg_split('/[\s,]+/', $summationString);
-            $separators = ';';
-            $rawData = $summationString;
-        }
-        $numbers = preg_split('/['.$separators.']+/', $rawData);
+        $numbers = $this->filterNumbers($summationString);
         $result = array_sum($numbers);
         $this->writeJson($summationString, $result);
         return $result;
@@ -51,5 +41,43 @@ class CalculatorService implements ICalculatorService
         $jsonString = Storage::disk('local')->get('calculator-log.json');
         $data = json_decode($jsonString);
         return $data;
+    }
+
+    public function findNegativeNumbers(string $summationString = '') {
+        if (Str::startsWith($summationString, '//')) {
+            $data = preg_split('/[\s]+/', $summationString);
+            $separators = str_replace('//', '', $data[0]);
+            $rawData = $data[1];
+        }else {
+            $separators = ';';
+            $rawData = $summationString;
+        }
+        $numbers = preg_split('/['.$separators.']+/', $rawData);
+        $negativeNumbers = Arr::where($numbers, function ($value, $key) {
+            if($value < 0) {
+                return $value;
+            }
+        });
+        if($negativeNumbers){
+            return collect($negativeNumbers)->implode(', ');
+        }
+        return false;
+    }
+    private function filterNumbers(string $summationString){
+        if (Str::startsWith($summationString, '//')) {
+            $data = preg_split('/[\s]+/', $summationString);
+            $separators = str_replace('//', '', $data[0]);
+            $rawData = $data[1];
+        }else {
+            $separators = ';';
+            $rawData = $summationString;
+        }
+        $numbers = preg_split('/['.$separators.']+/', $rawData);
+        $positiveNumbers = Arr::where($numbers, function ($value, $key) {
+            if($value > 0) {
+                return $value;
+            }
+        });
+        return $positiveNumbers;
     }
 }

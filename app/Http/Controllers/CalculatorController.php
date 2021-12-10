@@ -8,13 +8,25 @@ use Illuminate\Support\Str;
 
 class CalculatorController extends Controller
 {
-    public function sumar(Request $request, ICalculatorService $service) : int
+    public function sumar(Request $request, ICalculatorService $service)
     {
         $summationString =  $request->input('summationString');
         if($summationString === null) {
-            return 0;
+            return response()->json([
+                'success' => true,
+                'result' => 0,
+            ]);
         }
-        return $service->sumar($summationString);
+        if($service->findNegativeNumbers($summationString)) {
+            return response()->json([
+                'success' => false,
+                'result' => $service->findNegativeNumbers($summationString),
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'result' => $service->sumar($summationString),
+        ]);
     }
 
     public function getResultsHistory(Request $request, ICalculatorService $service) : mixed {

@@ -20215,7 +20215,8 @@ var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
       summationString: '',
       // response
       calculatedHistoryGridItems: [],
-      result: 0
+      result: 0,
+      negatives: ''
     };
   },
   methods: {
@@ -20260,10 +20261,16 @@ var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
                   // eslint-disable-next-line
                   var e = error;
                 }).then(function (response) {
-                  _this.result = response.data;
-                  _this.showLoading = false;
-                  _this.showLogResults = true;
-                  scrollTo('#calculator-response-container');
+                  if (response.data.success) {
+                    _this.result = response.data.result;
+                    _this.showLoading = false;
+                    _this.showLogResults = true;
+                    scrollTo('#calculator-response-container');
+                  } else {
+                    _this.showHelpOnFail = true;
+                    _this.showLoading = false;
+                    _this.negatives = response.data.result;
+                  }
                 });
 
               case 8:
@@ -21193,7 +21200,8 @@ var _hoisted_15 = {
 };
 var _hoisted_16 = {
   key: 0,
-  id: "helpOnFail"
+  id: "helpOnFail",
+  "class": "bg-red-200 rounded-lg p-2"
 };
 
 var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
@@ -21202,7 +21210,9 @@ var _hoisted_17 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 /* HOISTED */
 );
 
-var _hoisted_18 = [_hoisted_17];
+var _hoisted_18 = {
+  id: "helpOnFailText"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_CalculatedHistoryGrid = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("CalculatedHistoryGrid");
 
@@ -21255,7 +21265,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "leave-to-class": "animated fadeOutUp"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [$data.showHelpOnFail == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
+      return [$data.showHelpOnFail == true ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_18, "negativos no permitidos " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.negatives), 1
+      /* TEXT */
+      )])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)];
     }),
     _: 1
     /* STABLE */
