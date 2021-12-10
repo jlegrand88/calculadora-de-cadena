@@ -77,7 +77,7 @@ class CalculatorService implements ICalculatorService
                     if($value){
                         return preg_quote($value);
                     } else {
-                        return '\s';
+                        return preg_quote('\s|,');
                     }
                 }, $output[1]);
                 $separators = collect($escapedSeparators)->implode('|');
@@ -89,13 +89,15 @@ class CalculatorService implements ICalculatorService
                 }
             }
         }else {
-            $separators = ';';
             $rawData = $summationString;
+            $separators = false;
         }
-        // (\*\*|\*)
-        // [**][-] 3***2-1
-        // dd($separators);
-        $numbers = preg_split('/('.$separators.')/', $rawData);
+
+        if($separators){
+            $numbers = preg_split('/('.$separators.')|,|\s+/', $rawData);
+        } else {
+            $numbers = preg_split('/[\s,]+/', $rawData);
+        }
         return $numbers;
     }
 }
