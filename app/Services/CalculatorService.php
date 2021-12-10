@@ -68,13 +68,34 @@ class CalculatorService implements ICalculatorService
     private function filterNumbers(?string $summationString) {
         if (Str::startsWith($summationString, '//')) {
             $data = preg_split('/[\s]+/', $summationString);
-            $separators = str_replace('//', '', $data[0]);
+            $rawSeparators = str_replace('//', '', $data[0]);
             $rawData = $data[1];
+            //verify multiple separators
+            $multiSeparators = preg_match_all('/\[(.*?)\]/', $rawSeparators, $output);
+            if(count($output[1])) {
+                $escapedSeparators = array_map(function($value) {
+                    if($value){
+                        return preg_quote($value);
+                    } else {
+                        return '\s';
+                    }
+                }, $output[1]);
+                $separators = collect($escapedSeparators)->implode('|');
+            } else {
+                if($rawSeparators){
+                    $separators = preg_quote($rawSeparators[0]);
+                } else {
+                    $separators = ';';
+                }
+            }
         }else {
             $separators = ';';
             $rawData = $summationString;
         }
-        $numbers = preg_split('/['.$separators.']+/', $rawData);
+        // (\*\*|\*)
+        // [**][-] 3***2-1
+        // dd($separators);
+        $numbers = preg_split('/('.$separators.')/', $rawData);
         return $numbers;
     }
 }
