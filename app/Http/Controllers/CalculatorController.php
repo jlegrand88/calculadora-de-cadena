@@ -11,13 +11,13 @@ class CalculatorController extends Controller
     public function sumar(Request $request, ICalculatorService $service)
     {
         $summationString =  $request->input('summationString');
-        if($summationString === null) {
-            return response()->json([
-                'success' => true,
-                'result' => 0,
-            ]);
-        }
-        if($service->findNegativeNumbers($summationString)) {
+        // if($summationString === null) {
+        //     return response()->json([
+        //         'success' => true,
+        //         'result' =>$service->sumar($summationString),
+        //     ]);
+        // }
+        if($summationString && $service->findNegativeNumbers($summationString)) {
             return response()->json([
                 'success' => false,
                 'result' => $service->findNegativeNumbers($summationString),
