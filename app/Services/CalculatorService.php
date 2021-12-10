@@ -63,7 +63,7 @@ class CalculatorService implements ICalculatorService
         }
         return false;
     }
-    private function filterNumbers(string $summationString){
+    private function filterNumbers(string $summationString) {
         if (Str::startsWith($summationString, '//')) {
             $data = preg_split('/[\s]+/', $summationString);
             $separators = str_replace('//', '', $data[0]);
@@ -74,7 +74,7 @@ class CalculatorService implements ICalculatorService
         }
         $numbers = preg_split('/['.$separators.']+/', $rawData);
         $positiveNumbers = Arr::where($numbers, function ($value, $key) {
-            if($value > 0) {
+            if($value > 0 && $value < 1000) {
                 return $value;
             }
         });
