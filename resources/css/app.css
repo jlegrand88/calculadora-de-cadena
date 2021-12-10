@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import '~animate.css/animate.compat.css';
+
+.bg-pattern{
+    background-color: #f5f5f5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239592ac' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
+.label {
+    @apply uppercase font-bold text-sm md:text-base float-left text-gray-600 absolute top-2 left-2 transition ease-in-out duration-700;
+}
+.active-label{
+@apply  origin-top-left transform-gpu -translate-y-8 scale-90;
+}
+/* Toggle switch */
+.toggle-label{
+@apply block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer;
+}
