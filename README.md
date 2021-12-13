@@ -12,5 +12,6 @@
 Ejecutar los comandos:
 - php composer install
 - npm install
+- php artisan migrate
 
 Hay que registrar un nuevo usuario para que se le asigne un api-token a este mismo y el sistema pueda hacer uso del mismo como Bearer Token, este ultimo se regenera con cada nuevo login.
